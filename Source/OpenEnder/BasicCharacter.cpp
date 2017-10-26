@@ -1,21 +1,32 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BasicCharacter.h"
-#include <GameFramework/CharacterMovementComponent.h>
-#include <Kismet/KismetMathLibrary.h>
+#include "ZeroGCharacterMovementComponent.h"
+
+#include "Components/SphereComponent.h"
 
 
 // Sets default values
-ABasicCharacter::ABasicCharacter()
+ABasicCharacter::ABasicCharacter(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer.SetDefaultSubobjectClass<UZeroGCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	MovementCollision = CreateDefaultSubobject<USphereComponent>(TEXT("ActorComponentCollider"));
+	if (MovementCollision)
+	{
+		MovementCollision->InitSphereRadius(40.0f);
+		MovementCollision->SetupAttachment(RootComponent);
+	}
 }
 
 // Called when the game starts or when spawned
 void ABasicCharacter::BeginPlay()
 {
+	UZeroGCharacterMovementComponent* zeroGMvtComp = Cast<UZeroGCharacterMovementComponent>(GetMovementComponent());
+	if (zeroGMvtComp && MovementCollision)
+		zeroGMvtComp->CollisionDetectionSphere = MovementCollision;
 	Super::BeginPlay();
 	
 }
