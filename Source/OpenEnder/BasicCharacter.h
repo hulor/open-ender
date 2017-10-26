@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "BasicCharacter.generated.h"
 
+class USphereComponent;
+
 UCLASS()
 class OPENENDER_API ABasicCharacter : public ACharacter
 {
@@ -13,13 +15,17 @@ class OPENENDER_API ABasicCharacter : public ACharacter
 
 public:
 	// Sets default values for this character's properties
-	ABasicCharacter();
+	ABasicCharacter(const FObjectInitializer& ObjectInitializer);
 
 public:
 	// UProperties
 	/** Force applied when impulsing a movement.*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement", DisplayName = "ImpulseForce")
 	float ImpulseForce;
+
+	/**Collision shape used by ZeroGCharacterMovementComponet if necessary to detect object to lean on.*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
+	USphereComponent* MovementCollision;
 
 protected:
 	// Called when the game starts or when spawned
